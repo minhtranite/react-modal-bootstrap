@@ -58,13 +58,13 @@ hideModal: function () {
 
 ### CSS
 
-**Webpack: **
+**Webpack:**
 
 ```js
 require('react-modal-bootstrap/lib/modal.css');
 ```
 
-**Without Webpack: **
+**Without Webpack:**
 
 ```html
 <link rel="stylesheet" type="text/css" href="path/to/react-modal-bootstrap/lib/modal.css">
