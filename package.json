@@ -1,8 +1,8 @@
 {
-  "name": "react-component-starter",
+  "name": "react-modal-bootstrap",
   "version": "0.0.1",
-  "description": "React component.",
-  "main": "lib/Component.js",
+  "description": "Modal component for ReactJS with Bootstrap style.",
+  "main": "lib/Modal.js",
   "scripts": {
     "serve": "gulp serve",
     "serve:dist": "gulp serve:dist",
@@ -13,7 +13,11 @@
   "keywords": [
     "react-component",
     "react",
-    "component"
+    "component",
+    "react-modal-bootstrap",
+    "modal",
+    "bootstrap",
+    "react-modal"
   ],
   "peerDependencies": {
     "react": "0.13.x"
@@ -34,6 +38,7 @@
     "file-loader": "^0.8.1",
     "gulp": "^3.8.11",
     "gulp-autoprefixer": "^2.2.0",
+    "gulp-babel": "^5.1.0",
     "gulp-csso": "^1.0.0",
     "gulp-imagemin": "^2.2.1",
     "gulp-karma": "0.0.4",
@@ -61,12 +66,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/user-name/component-name.git"
+    "url": "https://github.com/vn38minhtran/react-modal-bootstrap.git"
   },
-  "author": "Your Name",
+  "author": "Minh Tran",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/user-name/component-name/issues"
+    "url": "https://github.com/vn38minhtran/react-modal-bootstrap/issues"
   },
-  "homepage": "https://github.com/user-name/component-name"
+  "homepage": "https://github.com/vn38minhtran/react-modal-bootstrap"
 }

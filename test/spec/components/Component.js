@@ -6,7 +6,7 @@ describe('Component', function () {
   var Component, component;
 
   beforeEach(function () {
-    Component = require('../../../lib/Component');
+    Component = require('../../../src/Component');
     component = TestUtils.renderIntoDocument(
       <Component/>
     );
