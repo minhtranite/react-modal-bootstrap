@@ -2,7 +2,7 @@
 
 Modal component for React with bootstrap style.
 
-[<img src="./screenshot.png" style="width: 100%;" />](http://vn38minhtran.github.io/react-modal-bootstrap)
+[<img src="./screen-shot.png" style="width: 100%;" />](http://vn38minhtran.github.io/react-modal-bootstrap)
 
 ## Installation
 
