@@ -1,0 +1,24 @@
+.modal-backdrop {
+  background: rgba(0, 0, 0, 0.7);
+  opacity: 0;
+  visibility: hidden;
+  -webkit-transition: all 0.4s;
+          transition: all 0.4s;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.modal-backdrop.modal-backdrop-open {
+  opacity: 1;
+  visibility: visible;
+}
+
+.modal-dialog {
+  top: -600px;
+  -webkit-transition: all 0.4s;
+          transition: all 0.4s;
+}
+
+.modal-dialog.modal-dialog-open {
+  top: 0;
+}
