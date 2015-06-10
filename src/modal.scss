@@ -9,6 +9,9 @@
     opacity: 1;
     visibility: visible;
   }
+  &.children-open {
+    overflow-y: hidden;
+  }
 }
 
 .modal-dialog {

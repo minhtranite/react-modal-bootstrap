@@ -1,13 +1,13 @@
 var React = require('react');
 
-require('./bower_components/bootstrap-customize/css/bootstrap.css');
-require('../src/modal.scss');
-require('./assets/styles/app.scss');
-
 var Header = require('./components/Header');
 var Footer = require('./components/Footer');
 var Modal = require('../src/Modal');
 var ModalClose = require('../src/ModalClose');
+
+require('./bower_components/bootstrap-customize/css/bootstrap.css');
+require('../src/modal.scss');
+require('./assets/styles/app.scss');
 
 var App = React.createClass({
   getInitialState: function () {

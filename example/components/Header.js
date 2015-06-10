@@ -1,8 +1,6 @@
 var React = require('react');
 var logoImg = require('../assets/images/logo.svg');
 
-require('../assets/styles/header.scss');
-
 var Header = React.createClass({
   render: function () {
     return (

@@ -67,7 +67,7 @@ module.exports = {
     ]
   },
   plugins: [
-    new extractTextWebpackPlugin('[name].css')
+    new extractTextWebpackPlugin('[name].css', {allChunks: true})
   ],
   stats: {
     children: false

@@ -13,6 +13,10 @@
   visibility: visible;
 }
 
+.modal-backdrop.children-open {
+  overflow-y: hidden;
+}
+
 .modal-dialog {
   top: -600px;
   -webkit-transition: all 0.4s;

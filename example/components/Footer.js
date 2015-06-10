@@ -1,7 +1,5 @@
 var React = require('react');
 
-require('../assets/styles/footer.scss');
-
 var Footer = React.createClass({
   render: function () {
     return (

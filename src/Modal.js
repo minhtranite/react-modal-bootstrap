@@ -1,6 +1,14 @@
 var React = require('react/addons');
 var ClassNames = require('classnames');
 
+function findParentNode(parentClass, childObj) {
+  var testObj = childObj.parentNode;
+  while (testObj && (testObj.className === undefined || testObj.className.indexOf(parentClass) === -1)) {
+    testObj = testObj.parentNode;
+  }
+  return testObj;
+}
+
 var Modal = React.createClass({
   propTypes: {
     isOpen: React.PropTypes.bool.isRequired,
@@ -26,6 +34,7 @@ var Modal = React.createClass({
     React.findDOMNode(this.refs.dialog).addEventListener('blur', this.handleBlur);
     document.addEventListener('keydown', this.handleKeyDown);
     this.handleBody();
+    this.handleParent();
   },
   componentWillUnmount: function () {
     React.findDOMNode(this.refs.backDrop).removeEventListener('click', this.handleBackDropClick);
@@ -35,6 +44,7 @@ var Modal = React.createClass({
   },
   componentDidUpdate: function () {
     this.handleBody();
+    this.handleParent();
   },
   requestHide: function () {
     this.props.onRequestHide();
@@ -63,6 +73,16 @@ var Modal = React.createClass({
     } else {
       if (document.body.className.indexOf('modal-open') === -1) {
         document.body.className += document.body.className.length ? ' modal-open' : 'modal-open';
+      }
+    }
+  },
+  handleParent: function () {
+    var parentNode = findParentNode('modal-backdrop', React.findDOMNode(this.refs.backDrop));
+    if (parentNode) {
+      if (this.props.isOpen) {
+        parentNode.className += parentNode.className.length ? ' children-open' : 'children-open';
+      } else {
+        parentNode.className = parentNode.className.replace(/ ?children-open/, '');
       }
     }
   },
