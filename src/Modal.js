@@ -1,73 +1,81 @@
-var React = require('react/addons');
-var ClassNames = require('classnames');
+import React from 'react';
+import ClassNames from 'classnames';
 
-function findParentNode(parentClass, childObj) {
-  var testObj = childObj.parentNode;
+const findParentNode = (parentClass, childObj) => {
+  let testObj = childObj.parentNode;
   while (testObj && (testObj.className === undefined || testObj.className.indexOf(parentClass) === -1)) {
     testObj = testObj.parentNode;
   }
   return testObj;
-}
+};
 
-var Modal = React.createClass({
-  propTypes: {
+export default class Modal extends React.Component {
+  static propTypes = {
     isOpen: React.PropTypes.bool.isRequired,
     backdrop: React.PropTypes.bool,
     keyboard: React.PropTypes.bool,
     onRequestHide: React.PropTypes.func,
     size: React.PropTypes.oneOf(['modal-lg', 'modal-sm', '']),
     children: React.PropTypes.node.isRequired
-  },
-  getDefaultProps: function () {
-    return {
-      isOpen: false,
-      backdrop: true,
-      keyboard: true,
-      onRequestHide: function () {
-      },
-      size: ''
-    };
-  },
-  componentDidMount: function () {
+  };
+
+  static defaultProps = {
+    isOpen: false,
+    backdrop: true,
+    keyboard: true,
+    size: ''
+  };
+
+  componentDidMount = () => {
     React.findDOMNode(this.refs.backDrop).addEventListener('click', this.handleBackDropClick);
     React.findDOMNode(this.refs.dialog).addEventListener('focus', this.handleFocus);
     React.findDOMNode(this.refs.dialog).addEventListener('blur', this.handleBlur);
     document.addEventListener('keydown', this.handleKeyDown);
     this.handleBody();
     this.handleParent();
-  },
-  componentWillUnmount: function () {
+  };
+
+  componentWillUnmount = () => {
     React.findDOMNode(this.refs.backDrop).removeEventListener('click', this.handleBackDropClick);
     React.findDOMNode(this.refs.dialog).removeEventListener('focus', this.handleFocus);
     React.findDOMNode(this.refs.dialog).removeEventListener('blur', this.handleBlur);
     document.removeEventListener('keydown', this.handleKeyDown);
-  },
-  componentDidUpdate: function () {
+  };
+
+  componentDidUpdate = () => {
     this.handleBody();
     this.handleParent();
-  },
-  requestHide: function () {
-    this.props.onRequestHide();
-  },
-  handleBackDropClick: function (e) {
+  };
+
+  requestHide = () => {
+    if (this.props.onRequestHide) {
+      this.props.onRequestHide();
+    }
+  };
+
+  handleBackDropClick = (e) => {
     if (e.target !== e.currentTarget) return;
     if (this.props.backdrop) {
       this.requestHide();
     }
-  },
-  handleFocus: function () {
+  };
+
+  handleFocus = ()=> {
     this.focus = true;
-  },
-  handleBlur: function () {
+  };
+
+  handleBlur = () => {
     this.focus = false;
-  },
-  handleKeyDown: function (e) {
+  };
+
+  handleKeyDown = (e) => {
     if (this.props.keyboard && this.focus && e.keyCode === 27) {
       this.requestHide();
     }
-  },
-  handleBody: function () {
-    var modalsOpen = document.getElementsByClassName('modal-backdrop-open');
+  };
+
+  handleBody = () => {
+    let modalsOpen = document.getElementsByClassName('modal-backdrop-open');
     if (modalsOpen.length < 1) {
       document.body.className = document.body.className.replace(/ ?modal-open/, '');
     } else {
@@ -75,9 +83,10 @@ var Modal = React.createClass({
         document.body.className += document.body.className.length ? ' modal-open' : 'modal-open';
       }
     }
-  },
-  handleParent: function () {
-    var parentNode = findParentNode('modal-backdrop', React.findDOMNode(this.refs.backDrop));
+  };
+
+  handleParent = () => {
+    let parentNode = findParentNode('modal-backdrop', React.findDOMNode(this.refs.backDrop));
     if (parentNode) {
       if (this.props.isOpen) {
         parentNode.className += parentNode.className.length ? ' children-open' : 'children-open';
@@ -85,13 +94,14 @@ var Modal = React.createClass({
         parentNode.className = parentNode.className.replace(/ ?children-open/, '');
       }
     }
-  },
-  render: function () {
-    var backDropClass = ClassNames({
+  };
+
+  render() {
+    let backDropClass = ClassNames({
       'modal-backdrop': true,
       'modal-backdrop-open': this.props.isOpen
     });
-    var dialogClass = ClassNames({
+    let dialogClass = ClassNames({
       'modal-dialog': true,
       'modal-dialog-open': this.props.isOpen
     }, this.props.size);
@@ -107,6 +117,4 @@ var Modal = React.createClass({
       </div>
     );
   }
-});
-
-module.exports = Modal;
+}

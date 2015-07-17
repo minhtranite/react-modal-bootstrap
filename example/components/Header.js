@@ -1,8 +1,9 @@
-var React = require('react');
-var logoImg = require('../assets/images/logo.svg');
+import React from 'react';
 
-var Header = React.createClass({
-  render: function () {
+const logoImg = require('../assets/images/logo.svg');
+
+export default class Header extends React.Component {
+  render() {
     return (
       <header className='layout-header'>
         <nav className='navbar navbar-inverse'>
@@ -26,6 +27,4 @@ var Header = React.createClass({
       </header>
     );
   }
-});
-
-module.exports = Header;
+}

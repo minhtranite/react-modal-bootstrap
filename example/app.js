@@ -1,42 +1,43 @@
-var React = require('react');
-
-var Header = require('./components/Header');
-var Footer = require('./components/Footer');
-var Modal = require('../src/Modal');
-var ModalClose = require('../src/ModalClose');
+import React from 'react';
+import Header from './components/Header.js';
+import Footer from './components/Footer.js';
+import {Modal, ModalClose} from '../src';
 
 require('./bower_components/bootstrap-customize/css/bootstrap.css');
 require('../src/modal.scss');
 require('./assets/styles/app.scss');
 
-var App = React.createClass({
-  getInitialState: function () {
-    return {
-      isOpen: false,
-      isSubOpen: false
-    };
-  },
-  openModal: function () {
+class App extends React.Component {
+  state = {
+    isOpen: false,
+    isSubOpen: false
+  };
+
+  openModal = () => {
     this.setState({
       isOpen: true
     });
-  },
-  hideModal: function () {
+  };
+
+  hideModal = () => {
     this.setState({
       isOpen: false
     });
-  },
-  openSubModal: function () {
+  };
+
+  openSubModal = () => {
     this.setState({
       isSubOpen: true
     });
-  },
-  hideSubModal: function () {
+  };
+
+  hideSubModal = () => {
     this.setState({
       isSubOpen: false
     });
-  },
-  render: function () {
+  };
+
+  render() {
     return (
       <div className={'layout-page'}>
         <Header/>
@@ -145,7 +146,16 @@ var App = React.createClass({
       </div>
     );
   }
-});
+}
 
-React.render(<App />, document.body);
+function run() {
+  React.render(<App />, document.body);
+}
+
+if (window.addEventListener) {
+  window.addEventListener('DOMContentLoaded', run);
+} else {
+  window.attachEvent('onload', run);
+}
+
 
