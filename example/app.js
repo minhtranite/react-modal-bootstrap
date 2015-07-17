@@ -4,7 +4,6 @@ import Footer from './components/Footer.js';
 import {Modal, ModalClose} from '../src/index.js';
 
 require('./bower_components/bootstrap-customize/css/bootstrap.css');
-require('../src/modal.scss');
 require('./assets/styles/app.scss');
 
 class App extends React.Component {

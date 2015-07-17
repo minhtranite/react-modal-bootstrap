@@ -1,14 +1,8 @@
 import React from 'react';
 import ClassNames from 'classnames';
 import Radium from 'radium';
-
-const findParentNode = (parentClass, childObj) => {
-  let testObj = childObj.parentNode;
-  while (testObj && (testObj.className === undefined || testObj.className.indexOf(parentClass) === -1)) {
-    testObj = testObj.parentNode;
-  }
-  return testObj;
-};
+import Store from './Store.js';
+import ObjectAssign from 'object-assign';
 
 @Radium class Modal extends React.Component {
   static propTypes = {
@@ -17,6 +11,8 @@ const findParentNode = (parentClass, childObj) => {
     keyboard: React.PropTypes.bool,
     onRequestHide: React.PropTypes.func,
     size: React.PropTypes.oneOf(['modal-lg', 'modal-sm', '']),
+    backDropStyles: React.PropTypes.object,
+    dialogStyles: React.PropTypes.object,
     children: React.PropTypes.node.isRequired
   };
 
@@ -24,7 +20,17 @@ const findParentNode = (parentClass, childObj) => {
     isOpen: false,
     backdrop: true,
     keyboard: true,
-    size: ''
+    size: '',
+    backDropStyles: {},
+    dialogStyles: {}
+  };
+
+  state = {
+    storeIndex: Store.createModal(this.props.isOpen)
+  };
+
+  componentWillReceiveProps = (nextProps) => {
+    Store.setState(this.state.storeIndex, nextProps.isOpen);
   };
 
   componentDidMount = () => {
@@ -33,7 +39,6 @@ const findParentNode = (parentClass, childObj) => {
     React.findDOMNode(this.refs.dialog).addEventListener('blur', this.handleBlur);
     document.addEventListener('keydown', this.handleKeyDown);
     this.handleBody();
-    this.handleParent();
   };
 
   componentWillUnmount = () => {
@@ -45,7 +50,6 @@ const findParentNode = (parentClass, childObj) => {
 
   componentDidUpdate = () => {
     this.handleBody();
-    this.handleParent();
   };
 
   requestHide = () => {
@@ -86,23 +90,14 @@ const findParentNode = (parentClass, childObj) => {
     }
   };
 
-  handleParent = () => {
-    let parentNode = findParentNode('modal-backdrop', React.findDOMNode(this.refs.backDrop));
-    if (parentNode) {
-      if (this.props.isOpen) {
-        parentNode.className += parentNode.className.length ? ' children-open' : 'children-open';
-      } else {
-        parentNode.className = parentNode.className.replace(/ ?children-open/, '');
-      }
-    }
-  };
-
   render() {
+    let childrenOpen = Store.getState(this.state.storeIndex + 1);
     let backDropClass = ClassNames({
       'modal-backdrop': true,
-      'modal-backdrop-open': this.props.isOpen
+      'modal-backdrop-open': this.props.isOpen,
+      'modal-backdrop-children-open': childrenOpen
     });
-    let backDropStyles = {
+    let backDropStyles = ObjectAssign({
       base: {
         background: 'rgba(0, 0, 0, .7)',
         opacity: 0,
@@ -115,15 +110,15 @@ const findParentNode = (parentClass, childObj) => {
         opacity: 1,
         visibility: 'visible'
       },
-      subOpen: {
+      childrenOpen: {
         overflowY: 'hidden'
       }
-    };
+    }, this.props.backDropStyles);
     let dialogClass = ClassNames({
       'modal-dialog': true,
       'modal-dialog-open': this.props.isOpen
     }, this.props.size);
-    let dialogStyles = {
+    let dialogStyles = ObjectAssign({
       base: {
         top: -600,
         transition: 'all 0.4s'
@@ -131,11 +126,11 @@ const findParentNode = (parentClass, childObj) => {
       open: {
         top: 0
       }
-    };
+    }, this.props.dialogStyles);
     return (
       <div className='react-modal-wrapper'>
         <div className={backDropClass}
-          style={[backDropStyles.base, this.props.isOpen && backDropStyles.open]}
+          style={[backDropStyles.base, this.props.isOpen && backDropStyles.open, childrenOpen && backDropStyles.childrenOpen]}
           ref='backDrop'>
           <div className={dialogClass}
             style={[dialogStyles.base, this.props.isOpen && dialogStyles.open]}
