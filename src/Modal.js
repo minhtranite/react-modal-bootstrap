@@ -1,5 +1,6 @@
 import React from 'react';
 import ClassNames from 'classnames';
+import Radium from 'radium';
 
 const findParentNode = (parentClass, childObj) => {
   let testObj = childObj.parentNode;
@@ -9,7 +10,7 @@ const findParentNode = (parentClass, childObj) => {
   return testObj;
 };
 
-export default class Modal extends React.Component {
+@Radium class Modal extends React.Component {
   static propTypes = {
     isOpen: React.PropTypes.bool.isRequired,
     backdrop: React.PropTypes.bool,
@@ -101,14 +102,44 @@ export default class Modal extends React.Component {
       'modal-backdrop': true,
       'modal-backdrop-open': this.props.isOpen
     });
+    let backDropStyles = {
+      base: {
+        background: 'rgba(0, 0, 0, .7)',
+        opacity: 0,
+        visibility: 'hidden',
+        transition: 'all 0.4s',
+        overflowX: 'hidden',
+        overflowY: 'auto'
+      },
+      open: {
+        opacity: 1,
+        visibility: 'visible'
+      },
+      subOpen: {
+        overflowY: 'hidden'
+      }
+    };
     let dialogClass = ClassNames({
       'modal-dialog': true,
       'modal-dialog-open': this.props.isOpen
     }, this.props.size);
+    let dialogStyles = {
+      base: {
+        top: -600,
+        transition: 'all 0.4s'
+      },
+      open: {
+        top: 0
+      }
+    };
     return (
       <div className='react-modal-wrapper'>
-        <div className={backDropClass} ref='backDrop'>
-          <div className={dialogClass} tabIndex='-1' ref='dialog'>
+        <div className={backDropClass}
+          style={[backDropStyles.base, this.props.isOpen && backDropStyles.open]}
+          ref='backDrop'>
+          <div className={dialogClass}
+            style={[dialogStyles.base, this.props.isOpen && dialogStyles.open]}
+            tabIndex='-1' ref='dialog'>
             <div className="modal-content">
               {this.props.children}
             </div>
@@ -118,3 +149,5 @@ export default class Modal extends React.Component {
     );
   }
 }
+
+export default Modal;

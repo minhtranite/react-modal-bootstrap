@@ -1,4 +1,7 @@
-export Modal from './Modal';
-export ModalClose from './ModalClose';
+import Modal from './Modal.js';
+import ModalClose from './ModalClose.js';
 
-export default from './Modal';
+module.exports = {
+  Modal: Modal,
+  ModalClose: ModalClose
+};
