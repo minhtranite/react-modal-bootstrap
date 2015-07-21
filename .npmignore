@@ -1,5 +1,5 @@
 .idea
-.tmp
-dist
 .bowerrc
+dist
+example/bower_components
 bower.json

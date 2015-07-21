@@ -1,73 +1,86 @@
-var React = require('react/addons');
-var ClassNames = require('classnames');
+import React from 'react';
+import ClassNames from 'classnames';
+import Radium from 'radium';
+import Store from './Store.js';
+import ObjectAssign from 'object-assign';
 
-function findParentNode(parentClass, childObj) {
-  var testObj = childObj.parentNode;
-  while (testObj && (testObj.className === undefined || testObj.className.indexOf(parentClass) === -1)) {
-    testObj = testObj.parentNode;
-  }
-  return testObj;
-}
-
-var Modal = React.createClass({
-  propTypes: {
+@Radium class Modal extends React.Component {
+  static propTypes = {
     isOpen: React.PropTypes.bool.isRequired,
     backdrop: React.PropTypes.bool,
     keyboard: React.PropTypes.bool,
     onRequestHide: React.PropTypes.func,
     size: React.PropTypes.oneOf(['modal-lg', 'modal-sm', '']),
+    backDropStyles: React.PropTypes.object,
+    dialogStyles: React.PropTypes.object,
     children: React.PropTypes.node.isRequired
-  },
-  getDefaultProps: function () {
-    return {
-      isOpen: false,
-      backdrop: true,
-      keyboard: true,
-      onRequestHide: function () {
-      },
-      size: ''
-    };
-  },
-  componentDidMount: function () {
+  };
+
+  static defaultProps = {
+    isOpen: false,
+    backdrop: true,
+    keyboard: true,
+    size: '',
+    backDropStyles: {},
+    dialogStyles: {}
+  };
+
+  state = {
+    storeIndex: Store.createModal(this.props.isOpen)
+  };
+
+  componentWillReceiveProps = (nextProps) => {
+    Store.setState(this.state.storeIndex, nextProps.isOpen);
+  };
+
+  componentDidMount = () => {
     React.findDOMNode(this.refs.backDrop).addEventListener('click', this.handleBackDropClick);
     React.findDOMNode(this.refs.dialog).addEventListener('focus', this.handleFocus);
     React.findDOMNode(this.refs.dialog).addEventListener('blur', this.handleBlur);
     document.addEventListener('keydown', this.handleKeyDown);
     this.handleBody();
-    this.handleParent();
-  },
-  componentWillUnmount: function () {
+  };
+
+  componentWillUnmount = () => {
     React.findDOMNode(this.refs.backDrop).removeEventListener('click', this.handleBackDropClick);
     React.findDOMNode(this.refs.dialog).removeEventListener('focus', this.handleFocus);
     React.findDOMNode(this.refs.dialog).removeEventListener('blur', this.handleBlur);
     document.removeEventListener('keydown', this.handleKeyDown);
-  },
-  componentDidUpdate: function () {
+  };
+
+  componentDidUpdate = () => {
     this.handleBody();
-    this.handleParent();
-  },
-  requestHide: function () {
-    this.props.onRequestHide();
-  },
-  handleBackDropClick: function (e) {
+  };
+
+  requestHide = () => {
+    if (this.props.onRequestHide) {
+      this.props.onRequestHide();
+    }
+  };
+
+  handleBackDropClick = (e) => {
     if (e.target !== e.currentTarget) return;
     if (this.props.backdrop) {
       this.requestHide();
     }
-  },
-  handleFocus: function () {
+  };
+
+  handleFocus = ()=> {
     this.focus = true;
-  },
-  handleBlur: function () {
+  };
+
+  handleBlur = () => {
     this.focus = false;
-  },
-  handleKeyDown: function (e) {
+  };
+
+  handleKeyDown = (e) => {
     if (this.props.keyboard && this.focus && e.keyCode === 27) {
       this.requestHide();
     }
-  },
-  handleBody: function () {
-    var modalsOpen = document.getElementsByClassName('modal-backdrop-open');
+  };
+
+  handleBody = () => {
+    let modalsOpen = document.getElementsByClassName('modal-backdrop-open');
     if (modalsOpen.length < 1) {
       document.body.className = document.body.className.replace(/ ?modal-open/, '');
     } else {
@@ -75,30 +88,53 @@ var Modal = React.createClass({
         document.body.className += document.body.className.length ? ' modal-open' : 'modal-open';
       }
     }
-  },
-  handleParent: function () {
-    var parentNode = findParentNode('modal-backdrop', React.findDOMNode(this.refs.backDrop));
-    if (parentNode) {
-      if (this.props.isOpen) {
-        parentNode.className += parentNode.className.length ? ' children-open' : 'children-open';
-      } else {
-        parentNode.className = parentNode.className.replace(/ ?children-open/, '');
-      }
-    }
-  },
-  render: function () {
-    var backDropClass = ClassNames({
+  };
+
+  render() {
+    let childrenOpen = Store.getState(this.state.storeIndex + 1);
+    let backDropClass = ClassNames({
       'modal-backdrop': true,
-      'modal-backdrop-open': this.props.isOpen
+      'modal-backdrop-open': this.props.isOpen,
+      'modal-backdrop-children-open': childrenOpen
     });
-    var dialogClass = ClassNames({
+    let backDropStyles = ObjectAssign({
+      base: {
+        background: 'rgba(0, 0, 0, .7)',
+        opacity: 0,
+        visibility: 'hidden',
+        transition: 'all 0.4s',
+        overflowX: 'hidden',
+        overflowY: 'auto'
+      },
+      open: {
+        opacity: 1,
+        visibility: 'visible'
+      },
+      childrenOpen: {
+        overflowY: 'hidden'
+      }
+    }, this.props.backDropStyles);
+    let dialogClass = ClassNames({
       'modal-dialog': true,
       'modal-dialog-open': this.props.isOpen
     }, this.props.size);
+    let dialogStyles = ObjectAssign({
+      base: {
+        top: -600,
+        transition: 'top 0.4s'
+      },
+      open: {
+        top: 0
+      }
+    }, this.props.dialogStyles);
     return (
       <div className='react-modal-wrapper'>
-        <div className={backDropClass} ref='backDrop'>
-          <div className={dialogClass} tabIndex='-1' ref='dialog'>
+        <div className={backDropClass}
+          style={[backDropStyles.base, this.props.isOpen && backDropStyles.open, childrenOpen && backDropStyles.childrenOpen]}
+          ref='backDrop'>
+          <div className={dialogClass}
+            style={[dialogStyles.base, this.props.isOpen && dialogStyles.open]}
+            tabIndex='-1' ref='dialog'>
             <div className="modal-content">
               {this.props.children}
             </div>
@@ -107,6 +143,6 @@ var Modal = React.createClass({
       </div>
     );
   }
-});
+}
 
-module.exports = Modal;
+export default Modal;

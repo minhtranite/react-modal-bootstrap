@@ -1,23 +1,21 @@
-var React = require('react');
+import React from 'react';
 
-var ModalClose = React.createClass({
-  propTypes: {
+export default class ModalClose extends React.Component {
+  static propTypes = {
     onClick: React.PropTypes.func
-  },
-  getDefaultProps: function () {
-    return {
-      onClick: function () {
-      }
-    };
-  },
-  render: function () {
+  };
+
+  static defaultProps = {
+    onClick: () => {
+    }
+  };
+
+  render() {
     return (
-      <button type="button" className="close" aria-label="Close"
+      <button type='button' className='close' aria-label='Close'
         onClick={this.props.onClick}>
-        <span aria-hidden="true">&times;</span>
+        <span aria-hidden='true'>&times;</span>
       </button>
     );
   }
-});
-
-module.exports = ModalClose;
+}

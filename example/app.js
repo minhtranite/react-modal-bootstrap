@@ -1,42 +1,51 @@
-var React = require('react');
-
-var Header = require('./components/Header');
-var Footer = require('./components/Footer');
-var Modal = require('../src/Modal');
-var ModalClose = require('../src/ModalClose');
+import React from 'react';
+import Header from './components/Header.js';
+import Footer from './components/Footer.js';
+import {Modal, ModalClose} from '../src/index.js';
 
 require('./bower_components/bootstrap-customize/css/bootstrap.css');
-require('../src/modal.scss');
 require('./assets/styles/app.scss');
 
-var App = React.createClass({
-  getInitialState: function () {
-    return {
-      isOpen: false,
-      isSubOpen: false
-    };
-  },
-  openModal: function () {
+class App extends React.Component {
+  state = {
+    isOpen: false,
+    isSubOpen: false
+  };
+
+  openModal = () => {
     this.setState({
       isOpen: true
     });
-  },
-  hideModal: function () {
+  };
+
+  hideModal = () => {
     this.setState({
       isOpen: false
     });
-  },
-  openSubModal: function () {
+  };
+
+  openSubModal = () => {
     this.setState({
       isSubOpen: true
     });
-  },
-  hideSubModal: function () {
+  };
+
+  hideSubModal = () => {
     this.setState({
       isSubOpen: false
     });
-  },
-  render: function () {
+  };
+
+  render() {
+    let subModalDialogStyles = {
+      base: {
+        bottom: -600,
+        transition: 'bottom 0.4s'
+      },
+      open: {
+        bottom: 0
+      }
+    };
     return (
       <div className={'layout-page'}>
         <Header/>
@@ -104,9 +113,9 @@ var App = React.createClass({
                   neque nulla perspiciatis placeat, possimus quisquam
                   repellendus saepe suscipit tempore totam, vel voluptatem!</p>
 
-                <Modal isOpen={this.state.isSubOpen} backdrop={false}
-                  keyboard={false}
-                  onRequestHide={this.hideSubModal}>
+                <Modal isOpen={this.state.isSubOpen}
+                  onRequestHide={this.hideSubModal}
+                  dialogStyles={subModalDialogStyles}>
                   <div className='modal-header'>
                     <ModalClose onClick={this.hideSubModal}/>
                     <h4 className='modal-title'>Sub Modal title</h4>
@@ -145,7 +154,16 @@ var App = React.createClass({
       </div>
     );
   }
-});
+}
 
-React.render(<App />, document.body);
+function run() {
+  React.render(<App />, document.body);
+}
+
+if (window.addEventListener) {
+  window.addEventListener('DOMContentLoaded', run);
+} else {
+  window.attachEvent('onload', run);
+}
+
 

@@ -1,7 +1,7 @@
 var WebpackConfig = require('./helper/webpack-config');
 
 module.exports = WebpackConfig({
-  hot: false,
+  hot: true,
   hash: false,
   debug: true,
   optimize: false,
