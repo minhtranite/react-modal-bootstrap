@@ -21,25 +21,25 @@ var autoprefixerBrowsers = [
 ];
 
 gulp.task('clean', function () {
-  del.sync(['dist']);
+  del.sync(['lib']);
 });
 
 gulp.task('sass', function () {
   gulp.src('src/*.scss')
     .pipe(sass({outputStyle: 'expanded'}).on('error', sass.logError))
     .pipe(autoprefixer(autoprefixerBrowsers))
-    .pipe(gulp.dest('dist'));
+    .pipe(gulp.dest('lib'));
 });
 
 gulp.task('babel', function () {
   return gulp.src('src/*.{js,jsx}')
     .pipe(babel())
-    .pipe(gulp.dest('dist'));
+    .pipe(gulp.dest('lib'));
 });
 
 gulp.task('copy', function () {
   return gulp.src(['src/**/*', '!src/*.{scss,js}'], {dot: true})
-    .pipe(gulp.dest('dist'));
+    .pipe(gulp.dest('lib'));
 });
 
 gulp.task('lib', function (callback) {

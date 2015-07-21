@@ -1,11 +1,11 @@
 var fs = require('fs');
 var path = require('path');
 var replace = require('frep');
-var webpackStatsHelper = require('../lib/webpack-stats-helper');
+var webpackStatsHelper = require('../helper/webpack-stats-helper');
 
 var indexAppPath = path.join(__dirname, '../example/index.html');
-var indexDistPath = path.join(__dirname, '../example_dist/index.html');
-var patterns = webpackStatsHelper.getReplacePatterns(path.join(__dirname, '../example_dist/webpack.stats.json'));
+var indexDistPath = path.join(__dirname, '../dist/index.html');
+var patterns = webpackStatsHelper.getReplacePatterns(path.join(__dirname, '../dist/webpack.stats.json'));
 
 fs.readFile(indexAppPath, 'utf8', function (err, data) {
   if (err) {
@@ -16,6 +16,6 @@ fs.readFile(indexAppPath, 'utf8', function (err, data) {
 
   fs.writeFile(indexDistPath, result, 'utf8', function (err) {
     if (err) return console.log(err);
-    console.log('Create ./example_dist/index.html');
+    console.log('Create ./dist/index.html');
   });
 });

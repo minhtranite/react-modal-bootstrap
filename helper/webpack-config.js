@@ -9,7 +9,8 @@ module.exports = function (options) {
     hash: false,
     debug: false,
     optimize: false,
-    saveStats: false
+    saveStats: false,
+    failOnError: false
   };
 
   options = objectAssign(defaultOptions, options || {});
@@ -113,7 +114,7 @@ module.exports = function (options) {
   }
 
   if (options.saveStats) {
-    plugins.push(new webpackStatsHelper.saveToFile(path.join(__dirname, '../example_dist/webpack.stats.json')));
+    plugins.push(new webpackStatsHelper.saveToFile(path.join(__dirname, '../dist/webpack.stats.json')));
   }
 
   var config = {
@@ -126,7 +127,7 @@ module.exports = function (options) {
       return result;
     }, {}),
     output: {
-      path: path.join(__dirname, '../example_dist'),
+      path: path.join(__dirname, '../dist'),
       filename: options.hash ? '[hash].js' : '[name].js',
       chunkFilename: options.hash ? '[chunkhash].js' : '[name].chunk.js',
       publicPath: '/'
@@ -150,7 +151,9 @@ module.exports = function (options) {
     },
     plugins: plugins,
     eslint: {
-      configFile: path.join(__dirname, '../.eslintrc')
+      configFile: path.join(__dirname, '../.eslintrc'),
+      failOnError: options.failOnError,
+      emitError: options.failOnError
     },
     debug: options.debug
   };

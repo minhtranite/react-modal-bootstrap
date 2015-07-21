@@ -19,6 +19,6 @@ function rmDir(dirPath) {
   fs.rmdirSync(dirPath);
 }
 
-console.log('Clean ./example_dist');
-rmDir(path.join(__dirname, '../example_dist'));
-fs.mkdirSync(path.join(__dirname, '../example_dist'));
+console.log('Clean ./dist');
+rmDir(path.join(__dirname, '../dist'));
+fs.mkdirSync(path.join(__dirname, '../dist'));

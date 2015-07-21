@@ -1,4 +1,4 @@
-var Server = require('./lib/server');
+var Server = require('./helper/server');
 var path = require('path');
 var config = require('./webpack.preview.config');
 

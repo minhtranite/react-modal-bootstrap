@@ -1,5 +1,4 @@
 .idea
 dist
-example_dist
 node_modules
 example/bower_components

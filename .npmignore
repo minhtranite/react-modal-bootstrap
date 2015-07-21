@@ -1,6 +1,5 @@
 .idea
-.tmp
-example_dist
 .bowerrc
-bower.json
+dist
 example/bower_components
+bower.json
