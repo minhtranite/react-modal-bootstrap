@@ -37,6 +37,15 @@ class App extends React.Component {
   };
 
   render() {
+    let subModalDialogStyles = {
+      base: {
+        bottom: -600,
+        transition: 'bottom 0.4s'
+      },
+      open: {
+        bottom: 0
+      }
+    };
     return (
       <div className={'layout-page'}>
         <Header/>
@@ -104,9 +113,9 @@ class App extends React.Component {
                   neque nulla perspiciatis placeat, possimus quisquam
                   repellendus saepe suscipit tempore totam, vel voluptatem!</p>
 
-                <Modal isOpen={this.state.isSubOpen} backdrop={false}
-                  keyboard={false}
-                  onRequestHide={this.hideSubModal}>
+                <Modal isOpen={this.state.isSubOpen}
+                  onRequestHide={this.hideSubModal}
+                  dialogStyles={subModalDialogStyles}>
                   <div className='modal-header'>
                     <ModalClose onClick={this.hideSubModal}/>
                     <h4 className='modal-title'>Sub Modal title</h4>

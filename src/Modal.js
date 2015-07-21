@@ -121,7 +121,7 @@ import ObjectAssign from 'object-assign';
     let dialogStyles = ObjectAssign({
       base: {
         top: -600,
-        transition: 'all 0.4s'
+        transition: 'top 0.4s'
       },
       open: {
         top: 0
