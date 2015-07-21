@@ -12,28 +12,41 @@ npm install --save react-modal-bootstrap
 
 ## Usage
 
-### JS
+### Dependencies
+
+**Webpack:**
 
 ```js
-var Modal = require('react-modal-bootstrap');
-var ModalClose = require('react-modal-bootstrap/lib/ModalClose');
+require('path/to/bootstrap.css');
+```
 
-getInitialState: function () {
-  return {
-    isOpen: false
-  };
-},
-openModal: function () {
+**Without Webpack:**
+
+```html
+<link rel="stylesheet" type="text/css" href="path/to/bootstrap.css">
+```
+
+### JS (ES6)
+
+```js
+import {Modal, ModalClose} from 'react-modal-bootstrap';
+...
+state = {
+  isOpen: false
+};
+
+openModal = () => {
   this.setState({
     isOpen: true
   });
-},
-hideModal: function () {
+};
+
+hideModal = () => {
   this.setState({
     isOpen: false
   });
-}
-
+};
+...
 <Modal isOpen={this.state.isOpen} onRequestHide={this.hideModal}>
   <div className='modal-header'>
     <ModalClose onClick={this.hideModal}/>
@@ -56,21 +69,44 @@ hideModal: function () {
 </Modal>
 ```
 
-### CSS
+### Styles
 
-**Webpack:**
+**Default:**
 
 ```js
-require('react-modal-bootstrap/lib/modal.css');
+backDropStyles = {
+  base: {
+    background: 'rgba(0, 0, 0, .7)',
+    opacity: 0,
+    visibility: 'hidden',
+    transition: 'all 0.4s',
+    overflowX: 'hidden',
+    overflowY: 'auto'
+  },
+  open: {
+    opacity: 1,
+    visibility: 'visible'
+  },
+  childrenOpen: {
+    overflowY: 'hidden'
+  }
+};
+
+dialogStyles = {
+  base: {
+    top: -600,
+    transition: 'top 0.4s'
+  },
+  open: {
+    top: 0
+  }
+}
 ```
 
-**Without Webpack:**
+**Custom:**
 
-```html
-<link rel="stylesheet" type="text/css" href="path/to/react-modal-bootstrap/lib/modal.css">
-```
+You can set custom styles vie `backDropStyles`, `dialogStyles` prop.
 
-**Note:** Don't add `transform` property to `.modal-dialog`.
 
 ## Props
 | Name | Type | Default | Description |
@@ -80,6 +116,8 @@ require('react-modal-bootstrap/lib/modal.css');
 | keyboard | bool | true | Close when press ESC |
 | size | string | '' | 'modal-lg' or 'modal-ms' |
 | onRequestHide | function | function(){}| Callback when modal request hide |
+| backDropStyles | object | {} | Styles object ([Radium](https://github.com/FormidableLabs/radium)) |
+| dialogStyles | object | {} | Styles object ([Radium](https://github.com/FormidableLabs/radium)) |
 
 ## Example
 View [demo](http://vn38minhtran.github.io/react-modal-bootstrap) or example folder.

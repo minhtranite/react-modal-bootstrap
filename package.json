@@ -1,8 +1,8 @@
 {
   "name": "react-modal-bootstrap",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "description": "Modal component for ReactJS with Bootstrap style.",
-  "main": "lib/Modal.js",
+  "main": "lib/index.js",
   "scripts": {
     "start": "NODE_ENV=development node webpack.dev.server.js",
     "test": "NODE_ENV=development ./node_modules/karma/bin/karma start",
