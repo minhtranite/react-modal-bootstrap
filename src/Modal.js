@@ -1,8 +1,15 @@
 import React from 'react';
 import ClassNames from 'classnames';
 import Radium from 'radium';
-import Store from './Store.js';
 import ObjectAssign from 'object-assign';
+
+function findParentNode(parentClass, childObj) {
+  let testObj = childObj.parentNode;
+  while (testObj && (testObj.className === undefined || testObj.className.indexOf(parentClass) === -1)) {
+    testObj = testObj.parentNode;
+  }
+  return testObj;
+}
 
 @Radium class Modal extends React.Component {
   static propTypes = {
@@ -25,31 +32,29 @@ import ObjectAssign from 'object-assign';
     dialogStyles: {}
   };
 
-  state = {
-    storeIndex: Store.createModal(this.props.isOpen)
-  };
-
-  componentWillReceiveProps = (nextProps) => {
-    Store.setState(this.state.storeIndex, nextProps.isOpen);
-  };
-
   componentDidMount = () => {
-    React.findDOMNode(this.refs.backDrop).addEventListener('click', this.handleBackDropClick);
-    React.findDOMNode(this.refs.dialog).addEventListener('focus', this.handleFocus);
-    React.findDOMNode(this.refs.dialog).addEventListener('blur', this.handleBlur);
+    let backDropEl = React.findDOMNode(this.refs.backDrop);
+    let dialogEl = React.findDOMNode(this.refs.dialog);
+    backDropEl.addEventListener('click', this.handleBackDropClick);
+    dialogEl.addEventListener('focus', this.handleFocus);
+    dialogEl.addEventListener('blur', this.handleBlur);
     document.addEventListener('keydown', this.handleKeyDown);
     this.handleBody();
+    this.handleParent();
   };
 
   componentWillUnmount = () => {
-    React.findDOMNode(this.refs.backDrop).removeEventListener('click', this.handleBackDropClick);
-    React.findDOMNode(this.refs.dialog).removeEventListener('focus', this.handleFocus);
-    React.findDOMNode(this.refs.dialog).removeEventListener('blur', this.handleBlur);
+    let backDropEl = React.findDOMNode(this.refs.backDrop);
+    let dialogEl = React.findDOMNode(this.refs.dialog);
+    backDropEl.removeEventListener('click', this.handleBackDropClick);
+    dialogEl.removeEventListener('focus', this.handleFocus);
+    dialogEl.removeEventListener('blur', this.handleBlur);
     document.removeEventListener('keydown', this.handleKeyDown);
   };
 
   componentDidUpdate = () => {
     this.handleBody();
+    this.handleParent();
   };
 
   requestHide = () => {
@@ -90,13 +95,26 @@ import ObjectAssign from 'object-assign';
     }
   };
 
+  handleParent = () => {
+    let parentNode = findParentNode('modal-backdrop', React.findDOMNode(this.refs.backDrop));
+    if (parentNode) {
+      if (this.props.isOpen) {
+        parentNode.className += parentNode.className.length ? ' children-open' : 'children-open';
+        parentNode.style.overflowY = 'hidden';
+      } else {
+        parentNode.className = parentNode.className.replace(/ ?children-open/, '');
+        parentNode.style.overflowY = 'auto';
+      }
+    }
+  };
+
   render() {
-    let childrenOpen = Store.getState(this.state.storeIndex + 1);
     let backDropClass = ClassNames({
       'modal-backdrop': true,
       'modal-backdrop-open': this.props.isOpen,
-      'modal-backdrop-children-open': childrenOpen
+      'modal-backdrop-children-open': this.state.childrenOpen
     });
+
     let backDropStyles = ObjectAssign({
       base: {
         background: 'rgba(0, 0, 0, .7)',
@@ -109,15 +127,14 @@ import ObjectAssign from 'object-assign';
       open: {
         opacity: 1,
         visibility: 'visible'
-      },
-      childrenOpen: {
-        overflowY: 'hidden'
       }
     }, this.props.backDropStyles);
+
     let dialogClass = ClassNames({
       'modal-dialog': true,
       'modal-dialog-open': this.props.isOpen
     }, this.props.size);
+
     let dialogStyles = ObjectAssign({
       base: {
         top: -600,
@@ -127,17 +144,16 @@ import ObjectAssign from 'object-assign';
         top: 0
       }
     }, this.props.dialogStyles);
+
     return (
-      <div className='react-modal-wrapper'>
-        <div className={backDropClass}
-          style={[backDropStyles.base, this.props.isOpen && backDropStyles.open, childrenOpen && backDropStyles.childrenOpen]}
-          ref='backDrop'>
-          <div className={dialogClass}
-            style={[dialogStyles.base, this.props.isOpen && dialogStyles.open]}
-            tabIndex='-1' ref='dialog'>
-            <div className="modal-content">
-              {this.props.children}
-            </div>
+      <div className={backDropClass}
+        style={[backDropStyles.base, this.props.isOpen && backDropStyles.open]}
+        ref='backDrop'>
+        <div className={dialogClass}
+          style={[dialogStyles.base, this.props.isOpen && dialogStyles.open]}
+          tabIndex='-1' ref='dialog'>
+          <div className="modal-content">
+            {this.props.children}
           </div>
         </div>
       </div>

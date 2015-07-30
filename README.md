@@ -86,9 +86,6 @@ backDropStyles = {
   open: {
     opacity: 1,
     visibility: 'visible'
-  },
-  childrenOpen: {
-    overflowY: 'hidden'
   }
 };
 
