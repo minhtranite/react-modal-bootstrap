@@ -2,7 +2,7 @@ import React from 'react';
 
 const logoImg = require('../assets/images/logo.svg');
 
-export default class Header extends React.Component {
+class Header extends React.Component {
   render() {
     return (
       <header className='layout-header'>
@@ -28,3 +28,5 @@ export default class Header extends React.Component {
     );
   }
 }
+
+export default Header;

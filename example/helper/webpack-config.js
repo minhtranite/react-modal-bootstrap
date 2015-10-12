@@ -3,32 +3,42 @@ var webpack = require('webpack');
 var path = require('path');
 var webpackStatsHelper = require('./webpack-stats-helper');
 var url = require('url');
+var autoprefixer = require('autoprefixer');
+var pkg = require('../../package.json');
 
 module.exports = function (options) {
   var defaultOptions = {
     hot: false,
     hash: false,
     debug: false,
+    progress: false,
+    profile: false,
+    bail: false,
     optimize: false,
     saveStats: false,
     failOnError: false,
     host: '0.0.0.0',
     port: 3000,
-    https: false
+    https: false,
+    banner: false
   };
 
   options = merge(defaultOptions, options || {});
 
   var entry = {
-    app: path.join(__dirname, '../example/app.js')
+    app: path.join(__dirname, '../app/app.js')
   };
 
+  var alias = {};
+  alias[pkg.name + '$'] = path.join(__dirname, '../../src/index.js');
+  alias[pkg.name + '/src'] = path.join(__dirname, '../../src');
+
   var scssIncludePaths = [
-    path.join(__dirname, '../example/bower_components'),
-    path.join(__dirname, '../node_modules')
+    path.join(__dirname, '../app/bower_components'),
+    path.join(__dirname, '../../node_modules')
   ];
 
-  var autoprefixer = {
+  var autoprefixerOptions = {
     browsers: [
       'ie >= 10',
       'ie_mob >= 10',
@@ -41,6 +51,11 @@ module.exports = function (options) {
       'bb >= 10'
     ]
   };
+
+  var banner =
+    'Name: ' + pkg.name + '\n' +
+    'Version: ' + pkg.version + '\n' +
+    'Description: ' + pkg.description;
 
   var loaders = [
     {
@@ -58,15 +73,15 @@ module.exports = function (options) {
     },
     {
       test: /\.scss$/,
-      loader: 'style-loader!css-loader!autoprefixer-loader?' + JSON.stringify(autoprefixer) + '!sass-loader?outputStyle=expanded&' + scssIncludePaths.join('&includePaths[]=')
+      loader: 'style-loader!css-loader!postcss-loader!sass-loader?outputStyle=expanded&' + scssIncludePaths.join('&includePaths[]=')
     },
     {
       test: /\.sass$/,
-      loader: 'style-loader!css-loader!autoprefixer-loader?' + JSON.stringify(autoprefixer) + '!sass-loader?indentedSyntax=sass'
+      loader: 'style-loader!css-loader!postcss-loader!sass-loader?indentedSyntax=sass'
     },
     {
       test: /\.less$/,
-      loader: 'style-loader!css-loader!autoprefixer-loader?' + JSON.stringify(autoprefixer) + '!less-loader'
+      loader: 'style-loader!css-loader!postcss-loader!less-loader'
     }
   ];
 
@@ -90,35 +105,37 @@ module.exports = function (options) {
     });
   }
 
-  var plugins = [];
+  var plugins = [
+    new webpack.DefinePlugin({
+      'process.env': {
+        NODE_ENV: JSON.stringify(process.env.NODE_ENV)
+      }
+    })
+  ];
 
   if (options.hot) {
     plugins.push(new webpack.HotModuleReplacementPlugin());
   }
 
-  if (!options.optimize) {
-    plugins.push(new webpack.DefinePlugin({
-      'process.env': {
-        NODE_ENV: JSON.stringify('development')
-      }
-    }));
-  } else {
+  if (options.optimize) {
     plugins.push(new webpack.optimize.UglifyJsPlugin({
       compressor: {
         warnings: false
+      },
+      output: {
+        comments: false
       }
     }));
     plugins.push(new webpack.optimize.DedupePlugin());
-    plugins.push(new webpack.DefinePlugin({
-      'process.env': {
-        NODE_ENV: JSON.stringify('production')
-      }
-    }));
     plugins.push(new webpack.NoErrorsPlugin());
   }
 
   if (options.saveStats) {
     plugins.push(new webpackStatsHelper.saveToFile(path.join(__dirname, '../dist/webpack.stats.json')));
+  }
+
+  if (options.banner) {
+    plugins.push(new webpack.BannerPlugin(banner));
   }
 
   var config = {
@@ -142,10 +159,7 @@ module.exports = function (options) {
     },
     resolve: {
       extensions: ['', '.jsx', '.js'],
-      alias: {
-        app: path.join(__dirname, '../example'),
-        test: path.join(__dirname, '../test')
-      }
+      alias: alias
     },
     module: {
       preLoaders: [
@@ -159,11 +173,21 @@ module.exports = function (options) {
     },
     plugins: plugins,
     eslint: {
-      configFile: path.join(__dirname, '../.eslintrc'),
+      configFile: path.join(__dirname, '../../.eslintrc'),
       failOnError: options.failOnError,
       emitError: options.failOnError
     },
-    debug: options.debug
+    postcss: function () {
+      return [autoprefixer(autoprefixerOptions)];
+    },
+    node: {
+      net: 'mock',
+      dns: 'mock'
+    },
+    debug: options.debug,
+    progress: options.progress,
+    profile: options.profile,
+    bail: options.bail
   };
 
   if (options.devTool) {

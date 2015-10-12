@@ -152,7 +152,7 @@ function findParentNode(parentClass, childObj) {
         <div className={dialogClass}
           style={[dialogStyles.base, this.props.isOpen && dialogStyles.open]}
           tabIndex='-1' ref='dialog'>
-          <div className="modal-content">
+          <div className='modal-content'>
             {this.props.children}
           </div>
         </div>
