@@ -6,8 +6,15 @@ Modal component for React with bootstrap style.
 
 ## Installation
 
-```
+### NPM
+
+```bash
 npm install --save react-modal-bootstrap
+```
+
+### Bower
+```bash
+bower install --save react-modal-bootstrap
 ```
 
 ## Usage
@@ -26,7 +33,7 @@ require('path/to/bootstrap.css');
 <link rel="stylesheet" type="text/css" href="path/to/bootstrap.css">
 ```
 
-### JS (ES6)
+### JS
 
 ```js
 import {Modal, ModalClose} from 'react-modal-bootstrap';
@@ -104,6 +111,19 @@ dialogStyles = {
 
 You can set custom styles vie `backDropStyles`, `dialogStyles` prop.
 
+### UMD
+
+```html
+<link rel="stylesheet" type="text/css" href="path/to/bootstrap.css">
+<script src="path/to/react-modal-bootstrap/dist/react-modal-bootstrap.js"></script>
+```
+
+```js
+...
+var Modal = window.ReactModalBootstrap.Modal;
+var ModalClose = window.ReactModalBootstrap.ModalClose;
+...
+```
 
 ## Props
 | Name | Type | Default | Description |
