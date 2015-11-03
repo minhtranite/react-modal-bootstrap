@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import ClassNames from 'classnames';
 import Radium from 'radium';
 import ObjectAssign from 'object-assign';
@@ -33,8 +34,8 @@ function findParentNode(parentClass, childObj) {
   };
 
   componentDidMount = () => {
-    let backDropEl = React.findDOMNode(this.refs.backDrop);
-    let dialogEl = React.findDOMNode(this.refs.dialog);
+    let backDropEl = ReactDOM.findDOMNode(this.refs.backDrop);
+    let dialogEl = ReactDOM.findDOMNode(this.refs.dialog);
     backDropEl.addEventListener('click', this.handleBackDropClick);
     dialogEl.addEventListener('focus', this.handleFocus);
     dialogEl.addEventListener('blur', this.handleBlur);
@@ -44,8 +45,8 @@ function findParentNode(parentClass, childObj) {
   };
 
   componentWillUnmount = () => {
-    let backDropEl = React.findDOMNode(this.refs.backDrop);
-    let dialogEl = React.findDOMNode(this.refs.dialog);
+    let backDropEl = ReactDOM.findDOMNode(this.refs.backDrop);
+    let dialogEl = ReactDOM.findDOMNode(this.refs.dialog);
     backDropEl.removeEventListener('click', this.handleBackDropClick);
     dialogEl.removeEventListener('focus', this.handleFocus);
     dialogEl.removeEventListener('blur', this.handleBlur);
@@ -96,7 +97,7 @@ function findParentNode(parentClass, childObj) {
   };
 
   handleParent = () => {
-    let parentNode = findParentNode('modal-backdrop', React.findDOMNode(this.refs.backDrop));
+    let parentNode = findParentNode('modal-backdrop', ReactDOM.findDOMNode(this.refs.backDrop));
     if (parentNode) {
       if (this.props.isOpen) {
         parentNode.className += parentNode.className.length ? ' children-open' : 'children-open';
