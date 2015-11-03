@@ -125,6 +125,8 @@ var ModalClose = window.ReactModalBootstrap.ModalClose;
 ...
 ```
 
+Example [here](http://codepen.io/vn38minhtran/pen/yYqXpP)
+
 ## Props
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
