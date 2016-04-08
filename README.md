@@ -128,7 +128,11 @@ You can set custom styles vie `backDropStyles`, `dialogStyles` prop.
 ```js
 ...
 var Modal = window.ReactModalBootstrap.Modal;
+var ModalHeader = window.ReactModalBootstrap.ModalHeader;
+var ModalTitle = window.ReactModalBootstrap.ModalTitle;
 var ModalClose = window.ReactModalBootstrap.ModalClose;
+var ModalBody = window.ReactModalBootstrap.ModalBody;
+var ModalFooter = window.ReactModalBootstrap.ModalFooter;
 ...
 ```
 
