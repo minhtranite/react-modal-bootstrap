@@ -2,28 +2,28 @@ import 'babel-core/polyfill';
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {createHistory, useBasename} from 'history';
-import Router from 'react-router';
+import {createHistory} from 'history';
+import {Router, useRouterHistory} from 'react-router';
 import App from 'components/App.js';
-import pkg from '../../package.json';
+import {name} from '../../package.json';
 
-import 'assets/bower_components/bootstrap-customize/css/bootstrap.css';
+import 'bootstrap/dist/css/bootstrap.css';
 import 'assets/styles/app.scss';
 
 const routes = {
   path: '/',
   component: App,
   indexRoute: {
-    component: require('./components/pages/PageHome')
+    component: require('components/pages/Home')
   },
   childRoutes: [
-    require('./routes/Example1')
+    require('routes/Router')
   ]
 };
 
 const DEV = process && process.env && process.env.NODE_ENV === 'development';
-const history = useBasename(createHistory)({
-  basename: '/' + (DEV ? '' : pkg.name)
+const history = useRouterHistory(createHistory)({
+  basename: '/' + (DEV ? '' : name)
 });
 
 const run = () => {

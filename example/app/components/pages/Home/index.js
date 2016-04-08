@@ -1,8 +1,15 @@
 import React from 'react';
 import Document from 'components/common/Document';
-import {Modal, ModalClose} from 'react-modal-bootstrap';
+import {
+  Modal,
+  ModalHeader,
+  ModalTitle,
+  ModalClose,
+  ModalBody,
+  ModalFooter
+} from 'react-modal-bootstrap';
 
-class PageHome extends React.Component {
+class HomePage extends React.Component {
   state = {
     isOpen: false,
     isSubOpen: false
@@ -42,21 +49,21 @@ class PageHome extends React.Component {
         bottom: 0
       }
     };
+    let {isOpen, isSubOpen} = this.state;
     return (
-      <Document title='Home | React modal bootstrap' className='page-home'>
+      <Document title="Home | React modal bootstrap" className="page-home">
         <div>
-          <button className='btn btn-primary' onClick={this.openModal}>
+          <button className="btn btn-primary" onClick={this.openModal}>
             Open Modal
           </button>
 
-          <Modal isOpen={this.state.isOpen} size='modal-lg'
-            onRequestHide={this.hideModal}>
-            <div className='modal-header'>
+          <Modal isOpen={isOpen} size="modal-lg" onRequestHide={this.hideModal}>
+            <ModalHeader>
               <ModalClose onClick={this.hideModal}/>
-              <h4 className='modal-title'>Modal title</h4>
-            </div>
-            <div className='modal-body'>
-              <button className='btn btn-primary' onClick={this.openSubModal}>
+              <ModalTitle>Modal title</ModalTitle>
+            </ModalHeader>
+            <ModalBody>
+              <button className="btn btn-primary" onClick={this.openSubModal}>
                 Open Sub Modal
               </button>
               <hr/>
@@ -107,14 +114,14 @@ class PageHome extends React.Component {
                 neque nulla perspiciatis placeat, possimus quisquam
                 repellendus saepe suscipit tempore totam, vel voluptatem!</p>
 
-              <Modal isOpen={this.state.isSubOpen}
+              <Modal isOpen={isSubOpen}
                 onRequestHide={this.hideSubModal}
                 dialogStyles={subModalDialogStyles}>
-                <div className='modal-header'>
+                <ModalHeader>
                   <ModalClose onClick={this.hideSubModal}/>
-                  <h4 className='modal-title'>Sub Modal title</h4>
-                </div>
-                <div className='modal-body'>
+                  <ModalTitle>Sub Modal title</ModalTitle>
+                </ModalHeader>
+                <ModalBody>
                   <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.
                     Iusto laborum nemo porro quaerat qui quisquam sequi,
                     tenetur. Alias nostrum qui ratione repellat rerum tenetur
@@ -130,17 +137,17 @@ class PageHome extends React.Component {
                     explicabo hic incidunt placeat quasi repellendus soluta,
                     vero. Autem delectus est laborum minus modi molestias
                     natus provident, quidem rerum sint, voluptas!</p>
-                </div>
+                </ModalBody>
               </Modal>
-            </div>
-            <div className='modal-footer'>
-              <button className='btn btn-default' onClick={this.hideModal}>
+            </ModalBody>
+            <ModalFooter>
+              <button className="btn btn-default" onClick={this.hideModal}>
                 Close
               </button>
-              <button className='btn btn-primary'>
+              <button className="btn btn-primary">
                 Save changes
               </button>
-            </div>
+            </ModalFooter>
           </Modal>
         </div>
       </Document>
@@ -148,4 +155,4 @@ class PageHome extends React.Component {
   }
 }
 
-export default PageHome;
+export default HomePage;

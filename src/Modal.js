@@ -1,25 +1,27 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import ClassNames from 'classnames';
+import classnames from 'classnames';
 import Radium from 'radium';
-import ObjectAssign from 'object-assign';
+import assign from 'lodash.assign';
 
-function findParentNode(parentClass, childObj) {
-  let testObj = childObj.parentNode;
-  while (testObj && (testObj.className === undefined || testObj.className.indexOf(parentClass) === -1)) {
-    testObj = testObj.parentNode;
+const findParentNode = (parentClass, child) => {
+  let parent = child.parentNode;
+  while (parent && (parent.className === undefined || parent.className.indexOf(parentClass) === -1)) {
+    parent = parent.parentNode;
   }
-  return testObj;
-}
+  return parent;
+};
 
-@Radium class Modal extends React.Component {
+@Radium
+class Modal extends React.Component {
   static propTypes = {
+    className: React.PropTypes.string,
     isOpen: React.PropTypes.bool.isRequired,
     backdrop: React.PropTypes.bool,
     keyboard: React.PropTypes.bool,
-    onRequestHide: React.PropTypes.func,
     size: React.PropTypes.oneOf(['modal-lg', 'modal-sm', '']),
-    backDropStyles: React.PropTypes.object,
+    onRequestHide: React.PropTypes.func,
+    backdropStyles: React.PropTypes.object,
     dialogStyles: React.PropTypes.object,
     children: React.PropTypes.node.isRequired
   };
@@ -29,27 +31,17 @@ function findParentNode(parentClass, childObj) {
     backdrop: true,
     keyboard: true,
     size: '',
-    backDropStyles: {},
+    backdropStyles: {},
     dialogStyles: {}
   };
 
   componentDidMount = () => {
-    let backDropEl = ReactDOM.findDOMNode(this.refs.backDrop);
-    let dialogEl = ReactDOM.findDOMNode(this.refs.dialog);
-    backDropEl.addEventListener('click', this.handleBackDropClick);
-    dialogEl.addEventListener('focus', this.handleFocus);
-    dialogEl.addEventListener('blur', this.handleBlur);
     document.addEventListener('keydown', this.handleKeyDown);
     this.handleBody();
     this.handleParent();
   };
 
   componentWillUnmount = () => {
-    let backDropEl = ReactDOM.findDOMNode(this.refs.backDrop);
-    let dialogEl = ReactDOM.findDOMNode(this.refs.dialog);
-    backDropEl.removeEventListener('click', this.handleBackDropClick);
-    dialogEl.removeEventListener('focus', this.handleFocus);
-    dialogEl.removeEventListener('blur', this.handleBlur);
     document.removeEventListener('keydown', this.handleKeyDown);
   };
 
@@ -59,16 +51,18 @@ function findParentNode(parentClass, childObj) {
   };
 
   requestHide = () => {
-    if (this.props.onRequestHide) {
-      this.props.onRequestHide();
+    let {onRequestHide} = this.props;
+    if (onRequestHide) {
+      onRequestHide();
     }
   };
 
   handleBackDropClick = (e) => {
-    if (e.target !== e.currentTarget) return;
-    if (this.props.backdrop) {
-      this.requestHide();
+    let {backdrop} = this.props;
+    if (e.target !== e.currentTarget || !backdrop) {
+      return;
     }
+    this.requestHide();
   };
 
   handleFocus = ()=> {
@@ -80,26 +74,29 @@ function findParentNode(parentClass, childObj) {
   };
 
   handleKeyDown = (e) => {
-    if (this.props.keyboard && this.focus && e.keyCode === 27) {
-      this.requestHide();
+    let {keyboard} = this.props;
+    let el = ReactDOM.findDOMNode(this);
+    let childrenOpen = el.className.indexOf('children-open') !== -1;
+    if (keyboard && this.focus && e.keyCode === 27 && !childrenOpen) {
+      e.preventDefault();
+      setTimeout(this.requestHide, 0);
     }
   };
 
   handleBody = () => {
-    let modalsOpen = document.getElementsByClassName('modal-backdrop-open');
-    if (modalsOpen.length < 1) {
+    let openModals = document.getElementsByClassName('modal-backdrop-open');
+    if (openModals.length < 1) {
       document.body.className = document.body.className.replace(/ ?modal-open/, '');
-    } else {
-      if (document.body.className.indexOf('modal-open') === -1) {
-        document.body.className += document.body.className.length ? ' modal-open' : 'modal-open';
-      }
+    } else if (document.body.className.indexOf('modal-open') === -1) {
+      document.body.className += document.body.className.length ? ' modal-open' : 'modal-open';
     }
   };
 
   handleParent = () => {
-    let parentNode = findParentNode('modal-backdrop', ReactDOM.findDOMNode(this.refs.backDrop));
+    let parentNode = findParentNode('modal-backdrop', ReactDOM.findDOMNode(this));
     if (parentNode) {
-      if (this.props.isOpen) {
+      let {isOpen} = this.props;
+      if (isOpen) {
         parentNode.className += parentNode.className.length ? ' children-open' : 'children-open';
         parentNode.style.overflowY = 'hidden';
       } else {
@@ -110,13 +107,12 @@ function findParentNode(parentClass, childObj) {
   };
 
   render() {
-    let backDropClass = ClassNames({
-      'modal-backdrop': true,
-      'modal-backdrop-open': this.props.isOpen,
-      'modal-backdrop-children-open': this.state.childrenOpen
-    });
+    let {className, isOpen, backdropStyles, size, dialogStyles, children} = this.props;
+    let backDropClass = classnames(['modal-backdrop', className], {
+      'modal-backdrop-open': isOpen
+    }).trim();
 
-    let backDropStyles = ObjectAssign({
+    backdropStyles = assign({
       base: {
         background: 'rgba(0, 0, 0, .7)',
         opacity: 0,
@@ -129,14 +125,13 @@ function findParentNode(parentClass, childObj) {
         opacity: 1,
         visibility: 'visible'
       }
-    }, this.props.backDropStyles);
+    }, backdropStyles);
 
-    let dialogClass = ClassNames({
-      'modal-dialog': true,
-      'modal-dialog-open': this.props.isOpen
-    }, this.props.size);
+    let dialogClass = classnames(['modal-dialog', size], {
+      'modal-dialog-open': isOpen
+    });
 
-    let dialogStyles = ObjectAssign({
+    dialogStyles = assign({
       base: {
         top: -600,
         transition: 'top 0.4s'
@@ -144,18 +139,18 @@ function findParentNode(parentClass, childObj) {
       open: {
         top: 0
       }
-    }, this.props.dialogStyles);
+    }, dialogStyles);
 
     return (
       <div className={backDropClass}
-        style={[backDropStyles.base, this.props.isOpen && backDropStyles.open]}
-        ref='backDrop'>
+        style={[backdropStyles.base, isOpen && backdropStyles.open]}
+        onClick={this.handleBackDropClick}>
         <div className={dialogClass}
-          style={[dialogStyles.base, this.props.isOpen && dialogStyles.open]}
-          tabIndex='-1' ref='dialog'>
-          <div className='modal-content'>
-            {this.props.children}
-          </div>
+          style={[dialogStyles.base, isOpen && dialogStyles.open]}
+          tabIndex="-1"
+          onFocus={this.handleFocus}
+          onBlur={this.handleBlur}>
+          <div className="modal-content">{children}</div>
         </div>
       </div>
     );

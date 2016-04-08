@@ -1,7 +1,6 @@
-import Modal from './Modal.js';
-import ModalClose from './ModalClose.js';
-
-module.exports = {
-  Modal: Modal,
-  ModalClose: ModalClose
-};
+export Modal from './Modal';
+export ModalHeader from './ModalHeader';
+export ModalClose from './ModalClose';
+export ModalTitle from './ModalTitle';
+export ModalBody from './ModalBody';
+export ModalFooter from './ModalFooter';
