@@ -36,7 +36,14 @@ require('path/to/bootstrap.css');
 ### JS
 
 ```js
-import {Modal, ModalClose} from 'react-modal-bootstrap';
+import {
+  Modal,
+  ModalHeader,
+  ModalTitle,
+  ModalClose,
+  ModalBody,
+  ModalFooter
+} from 'react-modal-bootstrap';
 ...
 state = {
   isOpen: false
@@ -55,24 +62,24 @@ hideModal = () => {
 };
 ...
 <Modal isOpen={this.state.isOpen} onRequestHide={this.hideModal}>
-  <div className='modal-header'>
+  <ModalHeader>
     <ModalClose onClick={this.hideModal}/>
-    <h4 className='modal-title'>Modal title</h4>
-  </div>
-  <div className='modal-body'>
+    <ModalTitle>Modal title</ModalTitle>
+  </ModalHeader>
+  <ModalBody>
     <p>Ab ea ipsam iure perferendis! Ad debitis dolore excepturi
       explicabo hic incidunt placeat quasi repellendus soluta,
       vero. Autem delectus est laborum minus modi molestias
       natus provident, quidem rerum sint, voluptas!</p>
-  </div>
-  <div className='modal-footer'>
+  </ModalBody>
+  <ModalFooter>
     <button className='btn btn-default' onClick={this.hideModal}>
       Close
     </button>
     <button className='btn btn-primary'>
       Save changes
     </button>
-  </div>
+  </ModalFooter>
 </Modal>
 ```
 
@@ -81,7 +88,7 @@ hideModal = () => {
 **Default:**
 
 ```js
-backDropStyles = {
+backdropStyles = {
   base: {
     background: 'rgba(0, 0, 0, .7)',
     opacity: 0,
@@ -135,7 +142,7 @@ Example [here](http://codepen.io/vn38minhtran/pen/yYqXpP)
 | keyboard | bool | true | Close when press ESC |
 | size | string | '' | 'modal-lg' or 'modal-ms' |
 | onRequestHide | function | function(){}| Callback when modal request hide |
-| backDropStyles | object | {} | Styles object ([Radium](https://github.com/FormidableLabs/radium)) |
+| backdropStyles | object | {} | Styles object ([Radium](https://github.com/FormidableLabs/radium)) |
 | dialogStyles | object | {} | Styles object ([Radium](https://github.com/FormidableLabs/radium)) |
 
 ## Example

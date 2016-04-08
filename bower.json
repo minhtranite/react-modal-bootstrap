@@ -1,6 +1,6 @@
 {
   "name": "react-modal-bootstrap",
-  "version": "0.5.1",
+  "version": "1.0.0",
   "description": "Modal component for ReactJS with Bootstrap style.",
   "main": "dist/react-modal-bootstrap.js",
   "keywords": [
