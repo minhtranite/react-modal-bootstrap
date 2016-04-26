@@ -144,7 +144,7 @@ Example [here](http://codepen.io/vn38minhtran/pen/yYqXpP)
 | isOpen | bool   | false |             |
 | backdrop | bool | true | Close when click on backdrop |
 | keyboard | bool | true | Close when press ESC |
-| size | string | '' | 'modal-lg' or 'modal-ms' |
+| size | string | '' | 'modal-lg' or 'modal-sm' |
 | onRequestHide | function | function(){}| Callback when modal request hide |
 | backdropStyles | object | {} | Styles object ([Radium](https://github.com/FormidableLabs/radium)) |
 | dialogStyles | object | {} | Styles object ([Radium](https://github.com/FormidableLabs/radium)) |
