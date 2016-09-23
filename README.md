@@ -2,7 +2,7 @@
 
 Modal component for React with bootstrap style.
 
-[<img src="./screen-shot.png" style="width: 100%;" />](http://vn38minhtran.github.io/react-modal-bootstrap)
+[<img src="./screen-shot.png" style="width: 100%;" />](http://minhtranite.github.io/react-modal-bootstrap)
 
 ## Installation
 
@@ -150,4 +150,4 @@ Example [here](http://codepen.io/vn38minhtran/pen/yYqXpP)
 | dialogStyles | object | {} | Styles object ([Radium](https://github.com/FormidableLabs/radium)) |
 
 ## Example
-View [demo](http://vn38minhtran.github.io/react-modal-bootstrap) or example folder.
+View [demo](http://minhtranite.github.io/react-modal-bootstrap) or example folder.
