@@ -1,6 +1,6 @@
 {
   "name": "react-modal-bootstrap",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "Modal component for ReactJS with Bootstrap style.",
   "main": "lib/index.js",
   "scripts": {
@@ -24,7 +24,7 @@
   "dependencies": {
     "classnames": "^2.1.1",
     "lodash.assign": "^4.0.7",
-    "radium": "0.18.0"
+    "radium": "0.18.2"
   },
   "devDependencies": {
     "autoprefixer": "^6.3.1",
