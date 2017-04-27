@@ -18,8 +18,8 @@
     "react-modal"
   ],
   "peerDependencies": {
-    "react": "^0.14 || ^15.0.0",
-    "react-dom": "^0.14 || ^15.0.0"
+    "react": "^0.14 || ^15.1",
+    "react-dom": "^0.14 || ^15.1"
   },
   "dependencies": {
     "classnames": "^2.1.1",
