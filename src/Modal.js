@@ -1,5 +1,6 @@
-import React from 'react';
+import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
+import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import Radium from 'radium';
 import assign from 'lodash.assign';
@@ -13,17 +14,17 @@ const findParentNode = (parentClass, child) => {
 };
 
 @Radium
-class Modal extends React.Component {
+class Modal extends Component {
   static propTypes = {
-    className: React.PropTypes.string,
-    isOpen: React.PropTypes.bool.isRequired,
-    backdrop: React.PropTypes.bool,
-    keyboard: React.PropTypes.bool,
-    size: React.PropTypes.oneOf(['modal-lg', 'modal-sm', '']),
-    onRequestHide: React.PropTypes.func,
-    backdropStyles: React.PropTypes.object,
-    dialogStyles: React.PropTypes.object,
-    children: React.PropTypes.node.isRequired
+    className: PropTypes.string,
+    isOpen: PropTypes.bool.isRequired,
+    backdrop: PropTypes.bool,
+    keyboard: PropTypes.bool,
+    size: PropTypes.oneOf(['modal-lg', 'modal-sm', '']),
+    onRequestHide: PropTypes.func,
+    backdropStyles: PropTypes.object,
+    dialogStyles: PropTypes.object,
+    children: PropTypes.node.isRequired
   };
 
   static defaultProps = {

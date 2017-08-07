@@ -1,8 +1,9 @@
-import React from 'react';
+import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 
-class ModalClose extends React.Component {
+class ModalClose extends Component {
   static propTypes = {
-    onClick: React.PropTypes.func
+    onClick: PropTypes.func
   };
 
   static defaultProps = {
